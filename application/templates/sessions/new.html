@@ -1,0 +1,67 @@
+{% extends "layout/application.html" %}
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <p>Start taking advantage of our deals by signing in!</p>
+                </div>
+                <div class="col-lg-6">
+                    <h2>Sign In</h2>
+
+                    {% macro render_field(field, placeholder=None) %}
+                        {% if field.errors %}
+                            <div>
+                        {% elif field.flags.error %}
+                            <div>
+                        {% else %}
+                            <div>
+                        {% endif %}
+                    {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+                    {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+                    </div>
+                    {% endmacro %}
+
+                    <div>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        {% if form.errors %}
+                            <div>
+                                {% for field, error in form.errors.items() %}
+                                    {% for e in error %}
+                                        {{ e }}<br>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <form method="POST" action="{{ url_for('sessions.create') }}" accept-charset="UTF-8"
+                              role="form">
+                            {{ form.csrf_token }}
+                            <div class="form-group">
+                                {{ render_field(form.email, placeholder="Your Email Address", autofocus=True) }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ render_field(form.password, placeholder="Password") }}
+                            </div>
+
+                            <button type="submit" name="submit" class="btn btn-primary">Sign in</button>
+                        </form>
+
+                        <p>If you do not have an account, <a href="{{ url_for('registrations.new') }}">click here to register.</a> </p>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

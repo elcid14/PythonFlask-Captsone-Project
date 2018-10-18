@@ -1,0 +1,23 @@
+{% extends "layout/application.html" %}
+{% block title %}{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}{% endblock %}
+
+{% block content %}
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</h1>
+            <hr class="my-4">
+            <a class="btn btn-primary btn-lg" href="{{ url_for('purchases.new', vehicle_id=vehicle.id) }}"
+               role="button">Purchase Now</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            {% for image in vehicle.images %}
+                <div class="col-lg-3">
+                    <img class="img-fluid rounded" src="{{ image.url }}" width="200" alt="">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

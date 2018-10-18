@@ -1,0 +1,50 @@
+{% extends "layout/application.html" %}
+{% block title %}Modify Item{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <ul class="nav justify-content-center mb-5">
+            <li class="nav-item mr-2">
+                <a class="nav-link active btn btn-outline-primary" href="{{ url_for('inventory.index') }}">All
+                    Vehicles</a>
+            </li>
+            <li class="nav-item mr-2">
+                <a class="nav-link active btn btn-outline-secondary"
+                   href="{{ url_for('inventory.platform_edit', vehicle_id=vehicle.id) }}">Edit Vehicle</a>
+            </li>
+            <li class="nav-item">
+                <form method="post" action="{{ url_for('inventory.platform_delete', vehicle_id=vehicle.id) }}">
+                    <button type="submit" class="nav-link btn btn-outline-danger">Remove Vehicle</button>
+                </form>
+            </li>
+        </ul>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <h1>{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</h1>
+
+        <strong>Product Details:</strong>
+        <ul>
+            <li>Price: ${{ vehicle.price }}</li>
+            <li>Mileage: {{ vehicle.mileage }}</li>
+            <li>Color: {{ vehicle.color }}</li>
+        </ul>
+
+        <h1>Pictures</h1>
+        <form action="{{ url_for('inventory.platform_images_create', vehicle_id=vehicle.id) }}" class="dropzone mb-5"></form>
+
+        <div class="row">
+            {% for image in vehicle.images %}
+                <div class="col-lg-3">
+                    <img class="img-fluid rounded" src="{{ image.url }}" width="200" alt="">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
